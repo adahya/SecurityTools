@@ -2,6 +2,7 @@ import time, syslog
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from Daemon import daemon
+from TSSPM.TSSPM import loadTSSPM
 
 
 class Handler(FileSystemEventHandler):
@@ -25,6 +26,8 @@ class Handler(FileSystemEventHandler):
         if event.is_directory:
             return None
         syslog.syslog("Received event %s for the file %s." % (event.event_type, event.src_path))
+        loadTSSPM(event.src_path)
+
 
 
 class DB_watcher(daemon):
