@@ -1,6 +1,7 @@
 import time, syslog
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
+from Daemon import daemon
 
 
 class Handler(FileSystemEventHandler):
@@ -26,9 +27,10 @@ class Handler(FileSystemEventHandler):
         syslog.syslog("Received event %s for the file %s." % (event.event_type, event.src_path))
 
 
-class DB_watcher:
+class DB_watcher(daemon):
 
-    def __init__(self, folder):
+    def __init__(self, folder, pidfile='/Security/var/proc/watchdog/TSSPM/pidfile'):
+        daemon.__init__(self,pidfile=pidfile)
         self.observer = Observer()
         self.DIRECTORY_TO_WATCH = folder
 
